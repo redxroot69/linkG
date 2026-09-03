@@ -196,7 +196,7 @@ async def start_command(client: Bot, message: Message):
 
 
 #=====================================================================================##
-# Don't Remove Credit @CodeFlix_Bots, @rohit_1888
+# Don't Remove Credit @PublicXBots, @rohit_1888
 # Ask Doubt on telegram @CodeflixSupport
 
 async def get_link_creation_time(channel_id):
