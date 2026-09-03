@@ -11,8 +11,21 @@ from config import *
 from database.database import *
 from helper_func import *
 from datetime import datetime, timedelta
+from functools import wraps
 
 PAGE_SIZE = 6
+
+# Anonymous admins post with a hidden identity (from_user=None, sender_chat=chat),
+# so commands that must be tied to a real account cannot work for them.
+def require_real_user(func):
+    @wraps(func)
+    async def wrapper(client: Bot, message: Message, *args, **kwargs):
+        if sender_user_id(message) is None:
+            return await message.reply(
+                "<b><blockquote expandable>⚠️ ᴘʟᴇᴀsᴇ ʀᴜɴ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴡɪᴛʜ ʏᴏᴜʀ ᴘᴇʀsᴏɴᴀʟ ᴀᴄᴄᴏᴜɴᴛ ɪɴ ᴛʜᴇ ʙᴏᴛ's ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.</b>\n\n<i>Tᴇʟᴇɢʀᴀᴍ ᴅᴏᴇs ɴᴏᴛ ʀᴇᴠᴇᴀʟ ᴛʜᴇ ɪᴅᴇɴᴛɪᴛʏ ᴏғ ᴀɴᴏɴʏᴍᴏᴜs ᴀᴅᴍɪɴs, sᴏ I ᴄᴀɴ'ᴛ ʟɪɴᴋ ᴛʜɪs ᴀᴄᴛɪᴏɴ ᴛᴏ ʏᴏᴜʀ ᴀᴄᴄᴏᴜɴᴛ.</i>"
+            )
+        return await func(client, message, *args, **kwargs)
+    return wrapper
 
 # Cache for chat information to avoid repeated API calls
 chat_info_cache = {}
@@ -31,7 +44,8 @@ async def revoke_invite_after_5_minutes(client: Bot, channel_id: int, link: str,
         print(f"Fᴀɪʟᴇᴅ ᴛᴏ ʀᴇᴠᴏᴋᴇ ɪɴᴠɪᴛᴇ ғᴏʀ ᴄʜᴀɴɴᴇʟ {channel_id}: {e}")
 
 # Add chat command
-@Bot.on_message((filters.command('addchat') | filters.command('addch')) & is_owner_or_admin)
+@Bot.on_message(filters.command('addchat') | filters.command('addch'))
+@require_real_user
 async def set_channel(client: Bot, message: Message):
     try:
         channel_id = int(message.command[1])
@@ -61,7 +75,7 @@ async def set_channel(client: Bot, message: Message):
             if not has_permission:
                 return await message.reply(f"<b><blockquote expandable>I ᴀᴍ ɪɴ {chat.title}, ʙᴜᴛ I ʟᴀᴄᴋ ᴘᴏsᴛɪɴɢ ᴏʀ ᴇᴅɪᴛɪɴɢ ᴘᴇʀᴍɪssɪᴏɴs.</b>")
         
-        await save_channel(channel_id)
+        await save_channel(channel_id, message.from_user.id)
         base64_invite = await save_encoded_link(channel_id)
         normal_link = f"https://t.me/{client.username}?start={base64_invite}"
         base64_request = await encode(str(channel_id))
@@ -85,22 +99,24 @@ async def set_channel(client: Bot, message: Message):
         return await message.reply(f"Unexpected Error: {str(e)}")
 
 # Delete chat command
-@Bot.on_message((filters.command('delchat') | filters.command('delch')) & is_owner_or_admin)
+@Bot.on_message(filters.command('delchat') | filters.command('delch'))
+@require_real_user
 async def del_channel(client: Bot, message: Message):
     try:
         channel_id = int(message.command[1])
     except (IndexError, ValueError):
         return await message.reply("<b><blockquote expandable>Iɴᴠᴀʟɪᴅ ᴄʜᴀᴛ ID. Exᴀᴍᴘʟᴇ: <code>/delch &lt;chat_id&gt;</code></b>")
     
-    await delete_channel(channel_id)
+    await delete_channel(channel_id, message.from_user.id)
     return await message.reply(f"<b><blockquote expandable>❌ Cʜᴀᴛ {channel_id} ʜᴀs ʙᴇᴇɴ ʀᴇᴍᴏᴠᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ.</b>")
 
 # Channel post command
-@Bot.on_message(filters.command('ch_links') & is_owner_or_admin)
+@Bot.on_message(filters.command('ch_links'))
+@require_real_user
 async def channel_post(client: Bot, message: Message):
     status_msg = await message.reply("⏳")
     try:
-        channels = await get_channels()
+        channels = await get_channels(message.from_user.id)
         if not channels:
             await status_msg.delete()
             return await message.reply("<b><blockquote expandable>Nᴏ ᴄʜᴀɴɴᴇʟs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ. Pʟᴇᴀsᴇ ᴜsᴇ /addch ᴛᴏ ᴀᴅᴅ ᴀ ᴄʜᴀɴɴᴇʟ.</b>")
@@ -172,15 +188,19 @@ async def send_channel_page(client, message, channels, page, status_msg=None, ed
 async def paginate_channels(client, callback_query):
     page = int(callback_query.data.split("_")[1])
     status_msg = await callback_query.message.edit_text("⏳")
-    channels = await get_channels()
+    user_id = callback_user_id(callback_query)
+    if user_id is None:
+        return await callback_query.answer("Not allowed", show_alert=True)
+    channels = await get_channels(user_id)
     await send_channel_page(client, callback_query.message, channels, page, status_msg=status_msg, edit=True)
 
 # Request post command
-@Bot.on_message(filters.command('reqlink') & is_owner_or_admin)
+@Bot.on_message(filters.command('reqlink'))
+@require_real_user
 async def req_post(client: Bot, message: Message):
     status_msg = await message.reply("⏳")
     try:
-        channels = await get_channels()
+        channels = await get_channels(message.from_user.id)
         if not channels:
             await status_msg.delete()
             return await message.reply("<b><blockquote expandable>Nᴏ ᴄʜᴀɴɴᴇʟs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ. Pʟᴇᴀsᴇ ᴜsᴇ /setchannel ᴛᴏ ᴀᴅᴅ ᴀ ᴄʜᴀɴɴᴇʟ</b>")
@@ -252,15 +272,19 @@ async def send_request_page(client, message, channels, page, status_msg=None, ed
 async def paginate_requests(client, callback_query):
     page = int(callback_query.data.split("_")[1])
     status_msg = await callback_query.message.edit_text("⏳")
-    channels = await get_channels()
+    user_id = callback_user_id(callback_query)
+    if user_id is None:
+        return await callback_query.answer("Not allowed", show_alert=True)
+    channels = await get_channels(user_id)
     await send_request_page(client, callback_query.message, channels, page, status_msg=status_msg, edit=True)
 
 # Links command - show all links as text
-@Bot.on_message(filters.command('links') & is_owner_or_admin)
+@Bot.on_message(filters.command('links'))
+@require_real_user
 async def show_links(client: Bot, message: Message):
     status_msg = await message.reply("⏳")
     try:
-        channels = await get_channels()
+        channels = await get_channels(message.from_user.id)
         if not channels:
             await status_msg.delete()
             return await message.reply("<b><blockquote expandable>Nᴏ ᴄʜᴀɴɴᴇʟs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ. Pʟᴇᴀsᴇ ᴜsᴇ /addch ᴛᴏ ᴀᴅᴅ ᴀ ᴄʜᴀɴɴᴇʟ.</b>")
@@ -349,11 +373,15 @@ async def send_links_page(client, message, channels, page, status_msg=None, edit
 async def paginate_links(client, callback_query):
     page = int(callback_query.data.split("_")[1])
     status_msg = await callback_query.message.edit_text("⏳")
-    channels = await get_channels()
+    user_id = callback_user_id(callback_query)
+    if user_id is None:
+        return await callback_query.answer("Not allowed", show_alert=True)
+    channels = await get_channels(user_id)
     await send_links_page(client, callback_query.message, channels, page, status_msg=status_msg, edit=True)
 
 # Bulk link generation command
-@Bot.on_message(filters.command('bulklink') & is_owner_or_admin)
+@Bot.on_message(filters.command('bulklink'))
+@require_real_user
 async def bulk_link(client: Bot, message: Message):
     user_id = message.from_user.id
 
@@ -361,10 +389,14 @@ async def bulk_link(client: Bot, message: Message):
         return await message.reply("<b><blockquote expandable>ᴜsᴀɢᴇ: <code>/bulklink &lt;id1&gt; &lt;id2&gt; ...</code></b>")
 
     ids = message.command[1:]
+    user_channels = await get_channels(user_id)
     reply_text = "<b>➤ Bᴜʟᴋ Lɪɴᴋ Gᴇɴᴇʀᴀᴛɪᴏɴ:</b>\n\n"
     for idx, id_str in enumerate(ids, start=1):
         try:
             channel_id = int(id_str)
+            if channel_id not in user_channels:
+                reply_text += f"<b>{idx}. Channel {id_str}</b> (Not in your channel list)\n\n"
+                continue
             chat = await client.get_chat(channel_id)
             base64_invite = await save_encoded_link(channel_id)
             normal_link = f"https://t.me/{client.username}?start={base64_invite}"
@@ -378,7 +410,8 @@ async def bulk_link(client: Bot, message: Message):
             reply_text += f"<b>{idx}. Channel {id_str}</b> (Error: {e})\n\n"
     await message.reply(reply_text)
 
-@Bot.on_message(filters.command('genlink') & filters.private & is_owner_or_admin)
+@Bot.on_message(filters.command('genlink'))
+@require_real_user
 async def generate_link_command(client: Bot, message: Message):
     user_id = message.from_user.id
     if len(message.command) < 2:
@@ -411,11 +444,12 @@ async def generate_link_command(client: Bot, message: Message):
     except Exception as e:
         await message.reply(f"<b>Error storing link:</b> <code>{e}</code>")
 
-@Bot.on_message(filters.command('channels') & is_owner_or_admin)
+@Bot.on_message(filters.command('channels'))
+@require_real_user
 async def show_channel_ids(client: Bot, message: Message):
     status_msg = await message.reply("⏳")
     try:
-        channels = await get_channels()
+        channels = await get_channels(message.from_user.id)
         if not channels:
             await status_msg.delete()
             return await message.reply("<b><blockquote expandable>Nᴏ ᴄʜᴀɴɴᴇʟs ᴀʀᴇ ᴀᴠᴀɪʟᴀʙʟᴇ. Pʟᴇᴀsᴇ ᴜsᴇ /addch ᴛᴏ ᴀᴅᴅ ᴀ ᴄʜᴀɴɴᴇʟ.</b>")
@@ -479,7 +513,10 @@ async def send_channel_ids_page(client, message, channels, page, status_msg=None
 async def paginate_channel_ids(client, callback_query):
     page = int(callback_query.data.split("_")[1])
     status_msg = await callback_query.message.edit_text("⏳")
-    channels = await get_channels()
+    user_id = callback_user_id(callback_query)
+    if user_id is None:
+        return await callback_query.answer("Not allowed", show_alert=True)
+    channels = await get_channels(user_id)
     await send_channel_ids_page(client, callback_query.message, channels, page, status_msg=status_msg, edit=True)
 
 # Helper function to get chat info with caching

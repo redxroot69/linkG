@@ -31,7 +31,39 @@ START_PIC = "https://telegra.ph/file/f3d3aff9ec422158feb05-d2180e3665e0ac4d32.jp
 START_IMG = "https://telegra.ph/file/f3d3aff9ec422158feb05-d2180e3665e0ac4d32.jpg"
 # Messages
 START_MSG = os.environ.get("START_MESSAGE", "<b>ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴛʜᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ʟɪɴᴋs sʜᴀʀɪɴɢ ʙᴏᴛ. ᴡɪᴛʜ ᴛʜɪs ʙᴏᴛ, ʏᴏᴜ ᴄᴀɴ sʜᴀʀᴇ ʟɪɴᴋs ᴀɴᴅ ᴋᴇᴇᴘ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟs sᴀғᴇ ғʀᴏᴍ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs.\n\n<blockquote>‣ ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href='https://t.me/codeflix_bots'>ʏᴀᴛᴏ</a></blockquote></b>")
-HELP = os.environ.get("HELP_MESSAGE", "<b><blockquote expandable>» Creator: <a href=https://t.me/proyato>Yato</a>\n» Our Community: <a href=https://t.me/otakuflix_network>Flix Network</a>\n» Anime Channel: <a href=https://t.me/animes_cruise>Anime Cruise</a>\n» Ongoing Anime: <a href=https://t.me/Ongoing_cruise>Ongoing cruise</a>\n» Developer: <a href=https://t.me/onlyyuji>Yuji</a></b>")
+HELP = os.environ.get("HELP_MESSAGE", """<b>ʜᴇʟᴘ / ᴄᴏᴍᴍᴀɴᴅs:</b>
+
+<blockquote><b>👤 Usᴇʀ</b>
+/start — sᴛᴀʀᴛ ʙᴏᴛ / ᴏᴘᴇɴ sʜᴀʀᴇᴅ ʟɪɴᴋs
+
+<b>📢 Cʜᴀɴɴᴇʟ & Lɪɴᴋs (Aᴅᴍɪɴ)</b>
+/addch <id> — ᴀᴅᴅ ᴄʜᴀɴɴᴇʟ
+/delch <id> — ʀᴇᴍᴏᴠᴇ ᴄʜᴀɴɴᴇʟ
+/channels — sʜᴏᴡ ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴄʜᴀɴɴᴇʟs (ɪᴅ & ɴᴀᴍᴇ)
+/ch_links — sʜᴏᴡ ᴄʜᴀɴɴᴇʟs ᴀs ʙᴜᴛᴛᴏɴs
+/links — sʜᴏᴡ ᴄʜᴀɴɴᴇʟ ʟɪɴᴋs
+/reqlink — sʜᴏᴡ ʀᴇǫᴜᴇsᴛ ʟɪɴᴋs
+/bulklink <id1> <id2>… — ʙᴜʟᴋ ʟɪɴᴋs
+/genlink <link> — ᴍᴀᴋᴇ ᴀ sʜᴀʀᴇᴀʙʟᴇ ʟɪɴᴋ
+
+<b>✅ Aᴜᴛᴏ Aᴘᴘʀᴏᴠᴇ (ᴘᴇʀ ᴄʜᴀᴛ)</b>
+/settings [id] — ᴄʜᴀɴɢᴇ sᴇᴛᴛɪɴɢs ᴠɪᴀ ʙᴜᴛᴛᴏɴs
+/settings time <sec> [id] — ᴄᴜsᴛᴏᴍ ᴡᴀɪᴛ ᴛɪᴍᴇ
+/reqtime <sec> [id] — sᴇᴛ ᴀᴘᴘʀᴏᴠᴀʟ ᴛɪᴍᴇʀ
+/reqmode on|off [id] — ᴛᴏɢɢʟᴇ ᴀᴜᴛᴏ ᴀᴘᴘʀᴏᴠᴀʟ
+/approveon <id> — ᴏɴ ғᴏʀ ᴄʜᴀɴɴᴇʟ
+/approveoff <id> — ᴏғғ ғᴏʀ ᴄʜᴀɴɴᴇʟ
+
+<b>📣 Bʀᴏᴀᴅᴄᴀsᴛ (Aᴅᴍɪɴ)</b>
+/broadcast [pin] [delete N] [silent] — ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ
+/cancel — sᴛᴏᴘ ʙʀᴏᴀᴅᴄᴀsᴛ
+/status — ʙᴏᴛ sᴛᴀᴛᴜs
+
+<b>⚙️ Oᴡɴᴇʀ Oɴʟʏ</b>
+/stats — ᴜᴘᴛɪᴍᴇ sᴛᴀᴛs
+/addadmin <id> — ᴀᴅᴅ ᴀᴅᴍɪɴ
+/deladmin <id> — ʀᴇᴍᴏᴠᴇ ᴀᴅᴍɪɴ
+/admins — ʟɪsᴛ ᴀᴅᴍɪɴs</blockquote>""")
 ABOUT = os.environ.get("ABOUT_MESSAGE", "<b><blockquote expandable>This bot is developed by Yato (@ProYato) to securely share Telegram channel links with temporary invite links, protecting your channels from copyright issues.</b>")
 
 ABOUT_TXT = """<b>›› ᴄᴏᴍᴍᴜɴɪᴛʏ: <a href='https://t.me/otakuflix_network'>ᴏᴛᴀᴋᴜғʟɪx</a>

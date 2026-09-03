@@ -168,6 +168,7 @@ async def start_command(client: Bot, message: Message):
         inline_buttons = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
+                 InlineKeyboardButton("• ʜᴇʟᴘ", callback_data="help"),
                  InlineKeyboardButton("• ᴄʜᴀɴɴᴇʟs", callback_data="channels")],
                 [InlineKeyboardButton("• Close •", callback_data="close")]
             ]
@@ -545,7 +546,18 @@ async def monitor_messages(client: Bot, message: Message):
 
 """
 
-@Bot.on_callback_query()
+class CbHandlerFilter(filters.Filter):
+    """Only handle callback data that belongs to this catch-all handler, so
+    callback queries for other plugins (settings menus, pagination, ...) are
+    NOT swallowed. Pyrogram dispatches to the first matching handler only."""
+    async def __call__(self, client, query: CallbackQuery) -> bool:
+        data = getattr(query, "data", "") or ""
+        if data in ("close", "about", "help", "channels", "start", "home", "fsub_back"):
+            return True
+        return data.startswith(("rfs_ch_", "rfs_toggle_"))
+
+
+@Bot.on_callback_query(CbHandlerFilter())
 async def cb_handler(client: Bot, query: CallbackQuery):
     data = query.data  
     chat_id = query.message.chat.id
@@ -571,6 +583,17 @@ async def cb_handler(client: Bot, query: CallbackQuery):
             ]),
         )
 
+    elif data == "help":
+        await query.edit_message_media(
+            InputMediaPhoto(
+                "https://envs.sh/Wdj.jpg",
+                HELP
+            ),
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton('• ʙᴀᴄᴋ', callback_data='start')]
+            ]),
+        )
+
     elif data == "channels":
         user = await client.get_users(OWNER_ID)
         user_link = f"https://t.me/{user.username}" if user.username else f"tg://openmessage?user_id={OWNER_ID}" 
@@ -587,6 +610,7 @@ async def cb_handler(client: Bot, query: CallbackQuery):
         inline_buttons = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("• ᴀʙᴏᴜᴛ", callback_data="about"),
+                 InlineKeyboardButton("• ʜᴇʟᴘ", callback_data="help"),
                  InlineKeyboardButton("• ᴄʜᴀɴɴᴇʟs", callback_data="channels")],
                 [InlineKeyboardButton("• Close •", callback_data="close")]
             ]

@@ -3,7 +3,7 @@ from pyrogram.types import Message
 from pyrogram import filters
 from config import OWNER_ID, BOT_STATS_TEXT, USER_REPLY_TEXT
 from datetime import datetime
-from helper_func import get_readable_time
+from helper_func import get_readable_time, is_owner_or_admin
 
 """
 @Bot.on_message(filters.private & filters.incoming)
@@ -13,7 +13,7 @@ async def useless(_,message: Message):
 
 """
 
-@Bot.on_message(filters.command('stats') & filters.user(OWNER_ID))
+@Bot.on_message(filters.command('stats') & is_owner_or_admin)
 async def stats(bot: Bot, message: Message):
     now = datetime.now()
     delta = now - bot.uptime

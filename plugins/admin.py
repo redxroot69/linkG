@@ -6,8 +6,9 @@ from pyrogram import Client, filters
 from pyrogram.types import Message, User, ChatJoinRequest, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait, ChatAdminRequired, RPCError
 from database.database import set_approval_off, is_approval_off, add_admin, remove_admin, list_admins
+from helper_func import is_owner_or_admin
 
-@Client.on_message(filters.command("addadmin") & filters.user(OWNER_ID))
+@Client.on_message(filters.command("addadmin") & is_owner_or_admin)
 async def add_admin_command(client, message: Message):
     if len(message.command) != 2 or not message.command[1].isdigit():
         return await message.reply_text("Usage: <code>/addadmin {user_id}</code>")
@@ -18,7 +19,7 @@ async def add_admin_command(client, message: Message):
     else:
         await message.reply_text(f"❌ Failed to add admin <code>{user_id}</code>.")
 
-@Client.on_message(filters.command("deladmin") & filters.user(OWNER_ID))
+@Client.on_message(filters.command("deladmin") & is_owner_or_admin)
 async def del_admin_command(client, message: Message):
     if len(message.command) != 2 or not message.command[1].isdigit():
         return await message.reply_text("Usage: <code>/deladmin {user_id}</code>")
@@ -29,7 +30,7 @@ async def del_admin_command(client, message: Message):
     else:
         await message.reply_text(f"❌ Failed to remove admin <code>{user_id}</code>.")
 
-@Client.on_message(filters.command("admins") & filters.user(OWNER_ID))
+@Client.on_message(filters.command("admins") & is_owner_or_admin)
 async def list_admins_command(client, message: Message):
     admins = await list_admins()
     if not admins:

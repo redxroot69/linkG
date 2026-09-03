@@ -1,0 +1,13 @@
+# Secrets - never commit
+.env
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Bot runtime
+*.session
+*.log
+links-sharingbot.txt
+run.log

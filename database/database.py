@@ -95,7 +95,7 @@ async def list_admins() -> list:
         print(f"Error listing admins: {e}")
         return []
 
-async def save_channel(channel_id: int) -> bool:
+async def save_channel(channel_id: int, user_id: int) -> bool:
     """Save a channel to the database with invite link expiration."""
     if not isinstance(channel_id, int):
         print(f"Invalid channel_id: {channel_id}")
@@ -107,6 +107,7 @@ async def save_channel(channel_id: int) -> bool:
             {
                 "$set": {
                     "channel_id": channel_id,
+                    "user_id": user_id,
                     "invite_link_expiry": None,
                     "created_at": datetime.utcnow(),
                     "status": "active"
@@ -119,10 +120,13 @@ async def save_channel(channel_id: int) -> bool:
         print(f"Error saving channel {channel_id}: {e}")
         return False
 
-async def get_channels() -> List[int]:
-    """Get all active channel IDs from the database."""
+async def get_channels(user_id: int = None) -> List[int]:
+    """Get all active channel IDs from the database, optionally scoped to a user."""
     try:
-        channels = await channels_collection.find({"status": "active"}).to_list(None)
+        query = {"status": "active"}
+        if user_id is not None:
+            query["user_id"] = user_id
+        channels = await channels_collection.find(query).to_list(None)
         valid_channels = []
         for channel in channels:
             if isinstance(channel, dict) and "channel_id" in channel:
@@ -136,10 +140,13 @@ async def get_channels() -> List[int]:
         print(f"Error fetching channels: {e}")
         return []
 
-async def delete_channel(channel_id: int) -> bool:
-    """Delete a channel from the database."""
+async def delete_channel(channel_id: int, user_id: int = None) -> bool:
+    """Delete a channel from the database, scoped to its owner if user_id is given."""
     try:
-        result = await channels_collection.delete_one({"channel_id": channel_id})
+        query = {"channel_id": channel_id}
+        if user_id is not None:
+            query["user_id"] = user_id
+        result = await channels_collection.delete_one(query)
         return result.deleted_count > 0
     except Exception as e:
         print(f"Error deleting channel {channel_id}: {e}")
@@ -318,29 +325,62 @@ async def get_original_link(channel_id: int) -> Optional[str]:
         print(f"Error fetching original link for channel {channel_id}: {e}")
         return None
 
-async def set_approval_off(channel_id: int, off: bool = True) -> bool:
-    """Set approval_off flag for a channel."""
+async def get_channel_settings(channel_id: int) -> dict:
+    """Get per-channel auto-approve settings (approval_enabled, approval_wait_time)."""
+    try:
+        channel = await channels_collection.find_one({"channel_id": channel_id})
+    except Exception as e:
+        print(f"Error fetching settings for channel {channel_id}: {e}")
+        channel = None
+    if channel:
+        enabled = channel.get("approval_enabled")
+        if enabled is None and "approval_off" in channel:
+            # legacy flag from the old global implementation
+            enabled = not bool(channel.get("approval_off", False))
+        if enabled is None:
+            enabled = True
+        return {
+            "approval_enabled": bool(enabled),
+            "approval_wait_time": int(channel.get("approval_wait_time", 5)),
+        }
+    return {"approval_enabled": True, "approval_wait_time": 5}
+
+async def set_channel_approval(channel_id: int, enabled: bool) -> bool:
+    """Enable or disable auto-approval for a channel."""
     if not isinstance(channel_id, int):
         print(f"Invalid channel_id: {channel_id}")
         return False
     try:
         await channels_collection.update_one(
             {"channel_id": channel_id},
-            {"$set": {"approval_off": off}},
+            {"$set": {"approval_enabled": bool(enabled)}},
             upsert=True
         )
         return True
     except Exception as e:
-        print(f"Error setting approval_off for channel {channel_id}: {e}")
+        print(f"Error setting approval for channel {channel_id}: {e}")
         return False
 
-async def is_approval_off(channel_id: int) -> bool:
-    """Check if approval_off flag is set for a channel."""
+async def set_channel_wait_time(channel_id: int, seconds: int) -> bool:
+    """Set the auto-approve wait time for a channel."""
     if not isinstance(channel_id, int):
+        print(f"Invalid channel_id: {channel_id}")
         return False
     try:
-        channel = await channels_collection.find_one({"channel_id": channel_id})
-        return bool(channel and channel.get("approval_off", False))
+        await channels_collection.update_one(
+            {"channel_id": channel_id},
+            {"$set": {"approval_wait_time": int(seconds)}},
+            upsert=True
+        )
+        return True
     except Exception as e:
-        print(f"Error checking approval_off for channel {channel_id}: {e}")
+        print(f"Error setting wait time for channel {channel_id}: {e}")
         return False
+
+async def set_approval_off(channel_id: int, off: bool = True) -> bool:
+    """Backwards-compatible wrapper: off=True disables auto-approval."""
+    return await set_channel_approval(channel_id, not off)
+
+async def is_approval_off(channel_id: int) -> bool:
+    """Backwards-compatible check: True when auto-approval is disabled."""
+    return not (await get_channel_settings(channel_id))["approval_enabled"]
