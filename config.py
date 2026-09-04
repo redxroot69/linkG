@@ -43,10 +43,10 @@ ABOUT_TXT = """<b>›› ᴄᴏᴍᴍᴜɴɪᴛʏ: <a href='https://t.me/otakufl
 ›› ᴅᴇᴠᴇʟᴏᴘᴇʀ: @Psy_demen</b></blockquote>""" # Bhosdiwalo agar developer me ᴅᴇᴠᴇʟᴏᴘᴇʀ ka username hataya to agli baar se koi repo public nhi krunga!!
 
 CHANNELS_TXT = """<b>›› ᴀɴɪᴍᴇ ᴄʜᴀɴɴᴇʟ: <a href='https://t.me/+Vpd6Z6HdYoQ1M2Jl'>💫  കുത്തു പടം  ♋️</a>
-<blockquote expandable>›› ᴍᴏᴠɪᴇs: <a href='https://t.me/+KP29fWPnJVRkMjA1'>🌸🐝പാതിᥤꪆത്രി🫦💦,💃</a>
-›› ᴡᴇʙsᴇʀɪᴇs: <a href='https://t.me/+QToDt5t3K8I0NmE1'>🌜 ˗ˏˋᥤꪆപ്പൂവ്᤻🌷⁀➷</a>
-›› ᴀᴅᴜʟᴛ ᴄʜᴀɴɴᴇʟs: <a href='https://t.me/+HiG_zLKV7o41ZGFl'>˙✧˖° ꢇ᭡ന്ത᭡ᥤ ᭄ ⋆° </a>
-›› ᴅᴇᴠᴇʟᴏᴘᴇʀ: @Psy_demen</b></blockquote>""" # Bhosdiwalo agar developer me ᴅᴇᴠᴇʟᴏᴘᴇʀ ka username hataya to agli baar se koi repo public nhi krunga!!
+<blockquote expandable>››  <a href='https://t.me/+KP29fWPnJVRkMjA1'>🌸🐝പാതിᥤꪆത്രി🫦💦,💃</a>
+››    <a href='https://t.me/+QToDt5t3K8I0NmE1'>🌜 ˗ˏˋᥤꪆപ്പൂവ്᤻🌷⁀➷</a>
+››    <a href='https://t.me/+HiG_zLKV7o41ZGFl'>˙✧˖° ꢇ᭡ന്ത᭡ᥤ ᭄ ⋆° </a>
+››     @Psy_demen</b></blockquote>""" # Bhosdiwalo agar developer me ᴅᴇᴠᴇʟᴏᴘᴇʀ ka username hataya to agli baar se koi repo public nhi krunga!!
 
 #--- ---- ---- --- --- --- - -- -  - - - - - - - - - - - --  - -
 # Default
