@@ -24,7 +24,7 @@ async def _send_request_welcome(client, chat, user):
     Fails silently for users who never started the bot or blocked it."""
     try:
         buttons = InlineKeyboardMarkup([
-            [InlineKeyboardButton('• ᴊᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇs •', url='https://t.me/PublicXBots')],
+            [InlineKeyboardButton('• ᴊᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇs •', url='https://t.me/MalluHaven')],
         ])
         caption = (
             f"<b>ʜᴇʏ {user.mention()},</b>\n\n"
@@ -82,7 +82,7 @@ async def autoapprove(client, message: ChatJoinRequest):
     if APPROVED == "on":
         invite_link = await client.export_chat_invite_link(chat.id)
         buttons = [
-            [InlineKeyboardButton('• ᴊᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇs •', url='https://t.me/PublicXBots')],
+            [InlineKeyboardButton('• ᴊᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇs •', url='https://t.me/MalluHaven')],
             [InlineKeyboardButton(f'• ᴊᴏɪɴ {chat.title} •', url=invite_link)]
         ]
         markup = InlineKeyboardMarkup(buttons)

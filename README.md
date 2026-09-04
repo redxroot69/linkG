@@ -292,7 +292,7 @@ docker rmi linksharebot         # Remove image
   <a href="https://t.me/codeflixsupport">
     <img src="https://img.shields.io/badge/Support_Group-Telegram-0088cc?style=for-the-badge&logo=telegram&logoColor=white" />
   </a>
-  <a href="https://t.me/PublicXBots">
+  <a href="https://t.me/MalluHaven">
     <img src="https://img.shields.io/badge/Updates_Channel-Telegram-6A5ACD?style=for-the-badge&logo=telegram&logoColor=white" />
   </a>
   <a href="https://t.me/Feudalmaster">

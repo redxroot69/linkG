@@ -1,4 +1,4 @@
-# +++ Modified By [telegram username: @PublicXBots
+# +++ Modified By [telegram username: @MalluHaven
 import os
 import asyncio
 from config import *
