@@ -31,8 +31,8 @@ START_PIC = "https://telegra.ph/file/f3d3aff9ec422158feb05-d2180e3665e0ac4d32.jp
 START_IMG = "https://telegra.ph/file/f3d3aff9ec422158feb05-d2180e3665e0ac4d32.jpg"
 # Messages
 START_MSG = os.environ.get("START_MESSAGE", "<b>ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴛʜᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ʟɪɴᴋs sʜᴀʀɪɴɢ ʙᴏᴛ. ᴡɪᴛʜ ᴛʜɪs ʙᴏᴛ, ʏᴏᴜ ᴄᴀɴ sʜᴀʀᴇ ʟɪɴᴋs ᴀɴᴅ ᴋᴇᴇᴘ ʏᴏᴜʀ ᴄʜᴀɴɴᴇʟs sᴀғᴇ ғʀᴏᴍ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs.\n\n<blockquote>‣ ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href='https://t.me/MalluHaven'>ʏᴀᴛᴏ</a></blockquote></b>")
-HELP = os.environ.get("HELP_MESSAGE", "<b><blockquote expandable>» Creator: <a href=https://t.me/Psy_demen>Yato</a>\n» Our Community: <a href=https://t.me/otakuflix_network>Flix Network</a>\n» Anime Channel: <a href=https://t.me/animes_cruise>Anime Cruise</a>\n» Ongoing Anime: <a href=https://t.me/Ongoing_cruise>Ongoing cruise</a>\n» Developer: <a href=https://t.me/onlyyuji>Yuji</a></b>")
-ABOUT = os.environ.get("ABOUT_MESSAGE", "<b><blockquote expandable>This bot is developed by Yato (@Psy_demen) to securely share Telegram channel links with temporary invite links, protecting your channels from copyright issues.</b>")
+HELP = os.environ.get("HELP_MESSAGE", "<b><blockquote expandable>» Creator: <a href=https://t.me/Psy_demen>ᴅᴇᴠᴇʟᴏᴘᴇʀ</a>\n» Our Community: <a href=https://t.me/otakuflix_network>Flix Network</a>\n» Anime Channel: <a href=https://t.me/animes_cruise>Anime Cruise</a>\n» Ongoing Anime: <a href=https://t.me/Ongoing_cruise>Ongoing cruise</a>\n» Developer: <a href=https://t.me/onlyyuji>Yuji</a></b>")
+ABOUT = os.environ.get("ABOUT_MESSAGE", "<b><blockquote expandable>This bot is developed by ᴅᴇᴠᴇʟᴏᴘᴇʀ (@Psy_demen) to securely share Telegram channel links with temporary invite links, protecting your channels from copyright issues.</b>")
 
 ABOUT_TXT = """<b>›› ᴄᴏᴍᴍᴜɴɪᴛʏ: <a href='https://t.me/otakuflix_network'>ᴏᴛᴀᴋᴜғʟɪx</a>
 <blockquote expandable>›› ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ: <a href='https://t.me/MalluHaven'>Cʟɪᴄᴋ ʜᴇʀᴇ</a>
@@ -40,13 +40,13 @@ ABOUT_TXT = """<b>›› ᴄᴏᴍᴍᴜɴɪᴛʏ: <a href='https://t.me/otakufl
 ›› ʟᴀɴɢᴜᴀɢᴇ: <a href='https://docs.python.org/3/'>Pʏᴛʜᴏɴ 3</a>
 ›› ʟɪʙʀᴀʀʏ: <a href='https://docs.pyrogram.org/'>Pʏʀᴏɢʀᴀᴍ ᴠ2</a>
 ›› ᴅᴀᴛᴀʙᴀsᴇ: <a href='https://www.mongodb.com/docs/'>Mᴏɴɢᴏ ᴅʙ</a>
-›› ᴅᴇᴠᴇʟᴏᴘᴇʀ: @Psy_demen</b></blockquote>""" # Bhosdiwalo agar developer me Yato ka username hataya to agli baar se koi repo public nhi krunga!!
+›› ᴅᴇᴠᴇʟᴏᴘᴇʀ: @Psy_demen</b></blockquote>""" # Bhosdiwalo agar developer me ᴅᴇᴠᴇʟᴏᴘᴇʀ ka username hataya to agli baar se koi repo public nhi krunga!!
 
 CHANNELS_TXT = """<b>›› ᴀɴɪᴍᴇ ᴄʜᴀɴɴᴇʟ: <a href='https://t.me/+Vpd6Z6HdYoQ1M2Jl'>💫  കുത്തു പടം  ♋️</a>
 <blockquote expandable>›› ᴍᴏᴠɪᴇs: <a href='https://t.me/+KP29fWPnJVRkMjA1'>🌸🐝പാതിᥤꪆത്രി🫦💦,💃</a>
 ›› ᴡᴇʙsᴇʀɪᴇs: <a href='https://t.me/+QToDt5t3K8I0NmE1'>🌜 ˗ˏˋᥤꪆപ്പൂവ്᤻🌷⁀➷</a>
 ›› ᴀᴅᴜʟᴛ ᴄʜᴀɴɴᴇʟs: <a href='https://t.me/+HiG_zLKV7o41ZGFl'>˙✧˖° ꢇ᭡ന്ത᭡ᥤ ᭄ ⋆° </a>
-›› ᴅᴇᴠᴇʟᴏᴘᴇʀ: @Psy_demen</b></blockquote>""" # Bhosdiwalo agar developer me Yato ka username hataya to agli baar se koi repo public nhi krunga!!
+›› ᴅᴇᴠᴇʟᴏᴘᴇʀ: @Psy_demen</b></blockquote>""" # Bhosdiwalo agar developer me ᴅᴇᴠᴇʟᴏᴘᴇʀ ka username hataya to agli baar se koi repo public nhi krunga!!
 
 #--- ---- ---- --- --- --- - -- -  - - - - - - - - - - - --  - -
 # Default

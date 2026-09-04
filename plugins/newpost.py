@@ -1,4 +1,4 @@
-# +++ Modified By Yato [telegram username: @Feudalmaster] +++
+# +++ Modified By ᴅᴇᴠᴇʟᴏᴘᴇʀ [telegram username: @Feudalmaster] +++
 import asyncio
 import base64
 from bot import Bot
